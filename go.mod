@@ -1,4 +1,4 @@
-module ocbc4
+module github.com/Zenovore/ocbc-practice-day4
 
 go 1.18
 
