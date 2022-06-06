@@ -6,9 +6,10 @@ import (
 )
 
 func main() {
+
 	router := gin.Default()
 
-	router.GET("/employees", services.GetAllEmployee)
+	router.GET("/employees", services.GetAllEmployee())
 	// router.GET("/employees/:id", services.GetEmployeeById)
 	// router.DELETE("/employees/:id", services.DeleteEmployeeById)
 	// router.PUT("/employees/:id", services.UpdateEmployeeById) // PUT FOR CREATE

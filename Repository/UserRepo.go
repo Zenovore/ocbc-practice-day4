@@ -8,19 +8,29 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "hydralisk123"
-	dbname   = "ocbc-training"
-)
+type Repository struct {
+	DB *sql.DB
+}
+
+func NewRepository(db *sql.DB) *Repository {
+	return &Repository{
+		DB: db}
+}
+
+// const (
+// 	host     = "localhost"
+// 	port     = 5432
+// 	user     = "postgres"
+// 	password = ""
+// 	dbname   = "ocbc-training"
+// )
+
+// var psqlInfo = fmt.Sprintf("host=%s port=%d user=%s "+
+// 	"password=%s dbname=%s sslmode=disable",
+// 	host, port, user, password, dbname)
+// var db, err = sql.Open("postgres", psqlInfo)
 
 // func init() {
-var psqlInfo = fmt.Sprintf("host=%s port=%d user=%s "+
-	"password=%s dbname=%s sslmode=disable",
-	host, port, user, password, dbname)
-var db, err = sql.Open("postgres", psqlInfo)
 
 // if err != nil {
 // 	return nil, err
@@ -30,10 +40,10 @@ var db, err = sql.Open("postgres", psqlInfo)
 
 // defer db.Close()
 
-func GetAllEmployees() ([]model.Employee, error) {
+func (r *Repository) GetAllEmployees() ([]model.Employee, error) {
 
 	var employees []model.Employee
-	rows, err := db.Query("SELECT * FROM employee")
+	rows, err := r.DB.Query("SELECT * FROM employee")
 	if err != nil {
 		return nil, err
 	}

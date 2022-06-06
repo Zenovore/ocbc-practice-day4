@@ -5,6 +5,10 @@ import (
 	// "strconv"
 
 	// model "github.com/Zenovore/ocbc-practice-day4/Model"
+	"fmt"
+
+	config "github.com/Zenovore/ocbc-practice-day4/Config"
+	model "github.com/Zenovore/ocbc-practice-day4/Model"
 	repository "github.com/Zenovore/ocbc-practice-day4/Repository"
 	"github.com/gin-gonic/gin"
 )
@@ -13,15 +17,30 @@ import (
 // GetAllEmployees() ([]Employee, error) LIST FUNCTION YG DIBUTUHKAN
 // }
 
-// type
+type UserService struct {
+	repository *repository.Repository
+}
 
-func GetAllEmployee(c *gin.Context) {
-	item, _ := repository.GetAllEmployees()
-	if item != nil {
-		c.JSON(200, item)
-	} else {
-		c.JSON(404, gin.H{"message": "no data"})
+type UserServiceInterface interface {
+	GetAllEmployee(c *gin.Context) []model.Employee
+}
+
+func NewService() UserServiceInterface {
+	db := config.GetDB()
+	repo := repository.NewRepository(db)
+	fmt.Println("db Connected")
+	return &UserService{
+		repository: repo,
 	}
+}
+
+func (s *UserService) GetAllEmployee(c *gin.Context) []model.Employee {
+	// func (s *UserService) GetAllEmployee() {
+	item, _ := s.repository.GetAllEmployees()
+	if item != nil {
+		return item
+	}
+	return nil
 }
 
 // func GetEmployeeById(c *gin.Context) {
