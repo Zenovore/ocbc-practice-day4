@@ -6,6 +6,7 @@ import (
 
 	// model "github.com/Zenovore/ocbc-practice-day4/Model"
 	"fmt"
+	"strconv"
 
 	config "github.com/Zenovore/ocbc-practice-day4/Config"
 	model "github.com/Zenovore/ocbc-practice-day4/Model"
@@ -23,6 +24,9 @@ type UserService struct {
 
 type UserServiceInterface interface {
 	GetAllEmployee(c *gin.Context) []model.Employee
+	GetEmployeeById(c *gin.Context) model.Employee
+	AddEmployee(c *gin.Context) error
+	DeleteEmployeeById(c *gin.Context) error
 }
 
 func NewService() UserServiceInterface {
@@ -43,25 +47,30 @@ func (s *UserService) GetAllEmployee(c *gin.Context) []model.Employee {
 	return nil
 }
 
-// func GetEmployeeById(c *gin.Context) {
-// 	id, _ := strconv.Atoi(c.Param("id"))
-// 	fmt.Println("get employee by id")
-// 	item := repository.GetEmployeeById(id)
-// 	c.JSON(200, item)
-// }
+func (s *UserService) GetEmployeeById(c *gin.Context) model.Employee {
+	id, _ := strconv.Atoi(c.Param("id"))
+	fmt.Println("get employee by id")
+	item := s.repository.GetEmployeeById(id)
+	return item
+}
 
-// func AddEmployee(c *gin.Context) {
-// 	var newEmployee model.Employee
-// 	if err := c.BindJSON(&newEmployee); err != nil {
-// 		return
-// 	}
-// 	fmt.Println("insert employee")
-// 	item := repository.AddEmployee(newEmployee)
-// }
+func (s *UserService) AddEmployee(c *gin.Context) error {
+	var newEmployee model.Employee
+	if err := c.BindJSON(&newEmployee); err != nil {
+		return nil
+	}
+	fmt.Println("insert employee")
+	item := s.repository.AddEmployee(newEmployee)
+	return item
+}
 
-// func DeleteEmployeeById(c *gin.Context) {
-// 	fmt.Println("delete employee id")
-// }
+func (s *UserService) DeleteEmployeeById(c *gin.Context) error {
+	fmt.Println("delete employee id")
+	id, _ := strconv.Atoi(c.Param("id"))
+	err := s.repository.DeleteEmployee(id)
+	return err
+}
+
 // func UpdateEmployeeById(c *gin.Context) {
 // 	fmt.Println("update employee id")
 // }
